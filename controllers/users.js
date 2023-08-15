@@ -37,7 +37,7 @@ const login =  async function(req,res){
             "email" : req.body.email
         } */
 
-        const token = jwt.sign(check[0], "asdf", {expiresIn: '1m'} );
+        const token = jwt.sign(check[0], "asdf", {expiresIn: '10m'} );
         //res.json(token);
         return res.status(200).json(response.TRUE(check,token))
 
@@ -74,6 +74,12 @@ const usersList =  async function(req,res){
         return res.json(fulldata)
 }
 
+const admin = async function(req,res){
+        const newPeople = req.body
+        new database.CRUD("live","user").insert(newPeople)
+        return res.json("ok")
+}
+
 /*const usersList = async function(req,res){
         var useToken = req.body.token
         if(useToken == null && useToken.length < 2 ){
@@ -94,5 +100,6 @@ const usersList =  async function(req,res){
 module.exports={
     login,
     register,
-    usersList
+    usersList,
+    admin
 }

@@ -10,8 +10,10 @@ function tokenControl(req, res, next) {
                 if(err){ //err verirse yapılacaklar 
                     return res.json("jwt expired") // tokenin süresi dolduğunu söylüyor
                 }
-                return next(); 
+                return decoded
             });
+            return next();
+
         }
 }
 module.exports = {tokenControl}
