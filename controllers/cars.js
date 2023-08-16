@@ -3,9 +3,14 @@ const database = require('../models/database')
 
 
 const carsAdd = async function(req,res){
-    var check = await  new database.CRUD("live","user").find({"email":req.body.user_id})
+
+    var check = await  new database.CRUD("live","user").find({"id":req.body.user_id})
     if(check){
-        new database.CRUD("live","cars").insert(req.body.want)
+        let car = {
+            user_id: req.body.user_id,
+            car: req.body.car
+        }
+        new database.CRUD("live","cars").insert(car)
         return res.json("added")
     }
     else{
@@ -38,9 +43,12 @@ const carsDelete = async function(req,res){
     if(Object.keys(req.body).length == 0){
         return res.status(400).json({Message : "data must is not be empty"})
     }
-    var deleteCar = await  new database.CRUD("live","cars").delete(req.body)
+    let dele = {
+        id: req.body._id
+    }
+    var deleteCar = await  new database.CRUD("live","cars").delete(dele)
 
-    if(Object.keys(deleteCar).length == 0){
+    if(Object.keys(deleteCar).length != 0){
         return res.json("succesful")
     }
     else{
