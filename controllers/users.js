@@ -79,6 +79,38 @@ const admin = async function(req,res){
         new database.CRUD("live","user").insert(newPeople)
         return res.json("ok")
 }
+const updatee = async function(req,res){
+    if(!req.body){
+        return res.status(400).json({Message : "data is not be empty"})
+    }
+    var updates = await  new database.CRUD("live", "user").update(
+        {email: req.body.email},
+        {$set: {"name": req.body.name}},
+        true
+    )
+
+    console.log(updates)
+    if(!updates){
+        return res.json("user not update")
+    }
+    else{
+        return res.json("user update")
+    }
+}
+
+const deletee = async function(req,res){
+    if(!req.body){
+        return res.status(400).json({Message : "data is not be empty"})
+    }
+    var deletes = await  new database.CRUD("live", "user").delete(req.body)
+    
+    if(!deletes){
+        return res.json("user not delete")
+    }
+    else{
+        return res.json("user deleted")
+    }
+}
 
 /*const usersList = async function(req,res){
         var useToken = req.body.token
@@ -101,5 +133,7 @@ module.exports={
     login,
     register,
     usersList,
-    admin
+    admin,
+    updatee,
+    deletee
 }
