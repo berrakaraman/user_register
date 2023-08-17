@@ -1,66 +1,55 @@
-const database = require('../models/database')
+// There is no Database here
 
-
-
-const carsAdd = async function(req,res){
-
-    var check = await  new database.CRUD("live","user").find({"id":req.body.user_id})
-    if(check){
-        let car = {
-            user_id: req.body.user_id,
-            car: req.body.car
-        }
-        new database.CRUD("live","cars").insert(car)
-        return res.json("added")
+const carsAdd = async function(req,res, next){
+    let myBody = {};
+    if(!req.body.user_id) {
+        return res.status(404).json({status: false});
     }
-    else{
-        return res.json("didn't add")
-    } 
-}
+    if(!req.body.model){
+        return res.status(404).json({status: false});
+    }
+    if(!req.body.plaka){
+        return res.status(404).json({status: false});
+    }
+    if(!req.body.color){
+        return res.status(404).json({status: false});
+    }
+    if(!req.body.years){
+        return res.status(404).json({status: false});
+    }
 
+    myBody.user_id = req.body.user_id.toString();
+    myBody.model = req.body.model.toString();
+    myBody.plaka = req.body.plaka.toString();
+    myBody.color = req.body.color.toString();
+    myBody.years = parseInt(req.body.years);
 
-const carsList =  async function(req,res){
-    var carsListt = await new database.CRUD("live","cars").find({}, [0,10])
-    return res.json(carsListt)
-}
+    req.body = myBody;
+    next();
+};
 
-const carsUpdate = async function(req,res){
+const carsUpdate = async function(req,res,next){
     if(!req.body){
-        console.log(req.body)
-        return res.status(400).json({Message : "data is not be empty"})
+        return res.status(400).json({Message : 'data must is not be empty'});
     }
-    else{
-        new database.CRUD("live","cars").update(
-            {_id : req.body.user_id},
-            {$set : {"car" : req.body.car}},
-            true
-        )
-        return res.json("ok")
+    if(!req.body.user_id){
+        return res.status(400).json({Message : 'data must is not be empty'});
     }
-} 
+    if(!req.body.car){
+        return res.status(400).json({Message : 'data must is not be empty'});
+    }
+    next();
+}; 
 
-const carsDelete = async function(req,res){
-    if(Object.keys(req.body).length == 0){
-        return res.status(400).json({Message : "data must is not be empty"})
+const carsDelete = async function(req,res,next){
+    if(!req.body.car_id){
+        return res.status(400).json({Message : 'delete must is not be empty'});
     }
-    let dele = {
-        id: req.body._id
-    }
-    var deleteCar = await  new database.CRUD("live","cars").delete(dele)
-
-    if(Object.keys(deleteCar).length != 0){
-        return res.json("succesful")
-    }
-    else{
-        return res.json("failed")
-    }
-} 
-
-
+    next();
+}; 
 
 module.exports = {
     carsAdd,
-    carsList,
     carsUpdate,
     carsDelete
-}
+};

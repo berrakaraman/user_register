@@ -1,4 +1,5 @@
 const { MongoClient, ObjectId } = require('mongodb');
+const { customAlphabet } = require('nanoid');
 
 
 
@@ -369,3 +370,4 @@ class CRUD {
 module.exports.CRUD = CRUD;
 module.exports.ObjectId = ObjectId;
 module.exports.toObjector = toObjector;
+module.exports.id= customAlphabet("01ABCDEFGHIJKLMNOPRSTUVYZ23456789", 18)
