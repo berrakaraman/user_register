@@ -42,9 +42,7 @@ const carsDelete = async function(req,res){
     let dele = {
         car_id: req.body.car_id
     };
-    console.log(dele);
     var deleteCar = await  new database.CRUD('live','cars').delete(dele);
-    console.log(deleteCar);
     if(deleteCar.result != 0){
         return res.json('succesful');
     }
@@ -52,11 +50,44 @@ const carsDelete = async function(req,res){
         return res.json('failed');
     }
 }; 
-
-
+const carsQuery = async function(req,res){
+    var carsQuery = await new database.CRUD('live','user').aggregate( [
+        {
+            $lookup:
+            {
+                from: 'cars',
+                localField: 'user_id',
+                foreignField: 'user_id',
+                as: 'plakalar'
+            }
+        }
+    ] );
+    return res.json(carsQuery);
+};
+const carQueryUser = async function(req,res){
+    var carsQueryUser = await new database.CRUD('live','user').aggregate(
+        [
+            {
+                '$match': {
+                    'user_id': req.body.user_id
+                }
+            }, {
+                '$lookup': {
+                    'from': 'cars', 
+                    'localField': 'user_id', 
+                    'foreignField': 'user_id', 
+                    'as': 'result'
+                }
+            }
+        ]
+    );
+    return res.json(carsQueryUser);
+};
 module.exports = {
     carsAdd,
     carsList,
     carsUpdate,
-    carsDelete
+    carsDelete,
+    carsQuery,
+    carQueryUser
 };

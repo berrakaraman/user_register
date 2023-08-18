@@ -23,7 +23,7 @@ const login =  async function(req,res){
         return res.status(400).json({status:false});
     }
     else{
-        const token = jwt.sign(check[0], 'asdf', {expiresIn: '30m'} );
+        const token = jwt.sign(check[0], 'asdf', {expiresIn: '60m'} );
         //res.json(token);
         return res.status(200).json(response.TRUE(check,token));
 
@@ -36,7 +36,8 @@ const register = async function(req,res){
         surname: req.body.surname,
         age:req.body.age,
         email:req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        role: req.body.role
     };
     var model = req.body;
     if(model.email  && model.age && model.password && model.name && model.surname ){
@@ -94,6 +95,7 @@ const deletee = async function(req,res){
         return res.json('user deleted');
     }
 };
+
 
 
 

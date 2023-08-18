@@ -29,6 +29,9 @@ const register = async function(req,res,next){
     if(!req.body.password){
         return res.status(400).json({Message : 'password is not be empty'});
     }
+    if(!req.body.role){
+        return res.status(400).json({Message : 'role is not be empty'});
+    }
     next();
 };
 

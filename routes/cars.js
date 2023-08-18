@@ -9,5 +9,7 @@ router.post('/carAdd',tokenControl, roleControl, cars.carsAdd, carSevice.carsAdd
 router.post('/carList', carSevice.carsList);
 router.post('/carUpdate', cars.carsUpdate,carSevice.carsUpdate);
 router.delete('/carDelete', cars.carsDelete, carSevice.carsDelete);
+router.post('/carQuery', carSevice.carsQuery);
+router.post('/carQueryUser', carSevice.carQueryUser);
 
 module.exports=router; //dışarı dosya alıp vermek için lazım
